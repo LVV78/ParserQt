@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="ParserQt.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Parser\Exceptions.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\FileReader.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\ParserBase.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\ParserSsd.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Preview.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\ReaderBase.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="ParserQt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="ParserQt.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="ParserQt.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{8572a990-e464-4234-9d85-b7e8ff9151a1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Parser\Exceptions.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\FileReader.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\ParserBase.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\ParserSsd.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\ParserTemplate.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Preview.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\ReaderBase.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
