@@ -6,7 +6,7 @@ void ParserStringTest::parseBlock()
 	{
 		return;
 	}
-	readName("Name", { {' '} }, true);
-	std::string val = readValue({ {} }, true);
+	readName("Name", { {'='} }, true);
+	std::string val = readValue({ {';'} }, true);
 	getData()->push_back(val);
 }

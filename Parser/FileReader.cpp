@@ -24,7 +24,7 @@ void FileReader::close()
 
 size_t FileReader::readBuffer()
 {
-	file_.read(buffer_, (std::streamsize)bufferSize());
+	file_.read(buffer(), (std::streamsize)bufferSize());
 	setEof(file_.eof());
 	return (size_t)file_.gcount();
 }

@@ -22,5 +22,8 @@ private:
     Ui::ParserQt *ui;
 private slots:
     void on_actionOpen_clicked();
+    void on_actionNameTest_clicked();
+    void on_actionNameError_clicked();
+    void on_actionValueError_clicked();
 };
 #endif // PARSERQT_H

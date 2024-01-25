@@ -1,5 +1,4 @@
 #include  "Exceptions.h"
-#include  "ParserBase.h"
 #include "ReaderBase.h"
 #include <cstring>
 void ReaderBase::close()
@@ -13,7 +12,6 @@ void ReaderBase::setEof(bool value)
 
 ReaderBase::ReaderBase(const char* blockSeparator, size_t bufferSize)
 {
-	provider_ = nullptr;
 	bufferPos_ = 0;
 	bufferSize_ = bufferSize;
 	size_t length = strlen(blockSeparator);
@@ -35,11 +33,6 @@ ReaderBase::~ReaderBase()
 	delete[] blockSeparator_;
 }
 
-void ReaderBase::setProvider(ParserBase* provider)
-{
-	provider_ = provider;
-}
-
 size_t ReaderBase::bufferSize()
 {
 	return bufferSize_;
@@ -49,6 +42,13 @@ char* ReaderBase::blockBuffer()
 {
 	return blockBuffer_;
 }
+
+char* ReaderBase::buffer()
+{
+	return buffer_;
+}
+
+
 
 inline bool ReaderBase::isStop(char value)
 {
@@ -83,62 +83,85 @@ char ReaderBase::getChar()
 			return stopChar_;
 		}
 		readCount_ = readBuffer();
+		if (readCount_ == 0)
+		{
+			setEof(true);
+			return stopChar_;
+		}
 		bufferPos_ = 0;
 	}
 	return  buffer_[bufferPos_++];
 }
 
-void ReaderBase::endBlock()
+void ReaderBase::doOpen()
 {
-	blockPos_ -= blockSeparatorLength_;
-	provider_->parseBlockExternal(blockPos_ + 1, blockCount_);
-	blockPos_ = 0;
-	blockCount_++;
+	if (!opened_)
+	{
+		open();
+		opened_ = true;
+		size_ = 0;
+		bufferPos_ = bufferSize_;
+		blockCount_ = 0;
+	}
 }
 
-void ReaderBase::read()
+void ReaderBase::doClose()
 {
-	open();
-	size_ = 0;
-	bufferPos_ = bufferSize_;
-	blockCount_ = 0;
+	if (opened_)
+	{
+		close();
+	}
+}
+
+bool ReaderBase::read()
+{
+	doOpen();
 	blockPos_ = 0;
-	char c = 0;
+	char c;
+
 	while (true)
 	{
 		c = getChar();
 		if (!isStop(c))
 		{
 			size_++;
-			if (blockPos_ > bufferSize_)
+			if (blockPos_ >= bufferSize_)
 			{
-				close();
+				doClose();
 				throw ProviderException(format(PE_BLOCK_TOO_LARGE, bufferSize_));
 			}
 			blockBuffer_[blockPos_] = c;
 			if (isBlockSeparator(c))
 			{
-				endBlock();
+				blockCount_++;
+				blockLength_ = blockPos_ - blockSeparatorLength_ + 1;
+				return true;
 			}
-			else
-			{
-				blockPos_++;
-			}
+    		blockPos_++;
 		}
 		else
 		{
 			if (blockPos_ > 0)
 			{
 				blockCount_++;
-				endBlock();
+				blockLength_ = blockPos_;
+				return true;
 			}
-			break;
+			else
+			{
+				doClose();
+				return false;
+			}
 		}
 	}
-	close();
 }
 
 size_t ReaderBase::blockCount()
 {
 	return blockCount_;
+}
+
+size_t ReaderBase::blockLength()
+{
+	return blockLength_;
 }

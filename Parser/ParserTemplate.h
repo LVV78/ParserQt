@@ -1,3 +1,4 @@
+//With a template and a set of basic functions for reading from data - very bad solution. I forgot that there are no interfaces in C++, but I didn’t redo it.
 #pragma once
 #include "ParserBase.h"
 #ifndef PROVIDER_TEMPLATE_H

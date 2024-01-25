@@ -1,3 +1,4 @@
+//Module for text highlighting
 #pragma once
 #include <string>
 #include <vector>

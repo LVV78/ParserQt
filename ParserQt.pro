@@ -13,8 +13,10 @@ SOURCES += \
     Parser/FileReader.cpp \
     Parser/ParserBase.cpp \
     Parser/ParserSsd.cpp \
+    Parser/ParserStringTest.cpp \
     Parser/Preview.cpp \
     Parser/ReaderBase.cpp \
+    Parser/StringReader.cpp \
     main.cpp \
     parserqt.cpp
 
@@ -23,9 +25,11 @@ HEADERS += \
     Parser/FileReader.h \
     Parser/ParserBase.h \
     Parser/ParserSsd.h \
+    Parser/ParserStringTest.h \
     Parser/ParserTemplate.h \
     Parser/Preview.h \
     Parser/ReaderBase.h \
+    Parser/StringReader.h \
     parserqt.h
 
 FORMS += \

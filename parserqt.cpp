@@ -6,6 +6,8 @@
 #include "Parser/Exceptions.h"
 #include "Parser/FileReader.h"
 #include "Parser/ParserSsd.h"
+#include "Parser/StringReader.h"
+#include "Parser/ParserStringTest.h"
 
 Ui::ParserQt* ParserQtClass;
 ParserQt::ParserQt(QWidget *parent)
@@ -14,6 +16,9 @@ ParserQt::ParserQt(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(on_actionOpen_clicked()));
+    connect(ui->actionNameTest, SIGNAL(triggered()), this, SLOT(on_actionNameTest_clicked()));
+    connect(ui->actionNameError, SIGNAL(triggered()), this, SLOT(on_actionNameError_clicked()));
+    connect(ui->actionValueError, SIGNAL(triggered()), this, SLOT(on_actionValueError_clicked()));
     ParserQtClass = ui;
 }
 
@@ -112,6 +117,54 @@ void ParserQt::paint(ParserBase* provider)
     painter.end();
     ui->paintLabel->setPicture(pi);
 }
+void ParserQt::on_actionNameTest_clicked()
+{
+    ui->textEdit->clear();
+    auto pb = new StringReader("Name= Value\rname= Value1", "\r", 12);
+    auto pssd = new ParserStringTest(pb);
+    pssd->previewCallback = previewBlock;
+    try
+    {
+        pssd->parse();
+    }
+    catch (const ProviderException& ex)
+    {
+        QMessageBox messageBox;
+        messageBox.critical(0, QCoreApplication::applicationName(), QString::fromStdString(ex.getMessage()));
+    }
+}
+void ParserQt::on_actionNameError_clicked()
+{
+    ui->textEdit->clear();
+    auto pb = new StringReader("Name= Value\rname1= Value1", "\r", 20);
+    auto pssd = new ParserStringTest(pb);
+    pssd->previewCallback = previewBlock;
+    try
+    {
+        pssd->parse();
+    }
+    catch (const ProviderException& ex)
+    {
+        QMessageBox messageBox;
+        messageBox.critical(0, QCoreApplication::applicationName(), QString::fromStdString(ex.getMessage()));
+    }
+}
+void ParserQt::on_actionValueError_clicked()
+{
+    ui->textEdit->clear();
+    auto pb = new StringReader("Name= Value\rName= ;Name2=value2", "\r", 100);
+    auto pssd = new ParserStringTest(pb);
+    pssd->previewCallback = previewBlock;
+    try
+    {
+        pssd->parse();
+    }
+    catch (const ProviderException& ex)
+    {
+        QMessageBox messageBox;
+        messageBox.critical(0, QCoreApplication::applicationName(), QString::fromStdString(ex.getMessage()));
+    }
+}
 void ParserQt::on_actionOpen_clicked()
 {
     // std::string fileName = "c:/0/big.ssd";
@@ -129,7 +182,7 @@ void ParserQt::on_actionOpen_clicked()
     pssd->previewCallback = previewBlock;
     try
     {
-        pb->read();
+        pssd->parse();
 
     }
     catch (const ProviderException& ex)

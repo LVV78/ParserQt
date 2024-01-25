@@ -209,7 +209,12 @@ void ParserBase::parserError(std::string message, std::string value)
 	preview_->add(phraseStart_, lastLength_, ptError);
 	callPreview();
 	auto posText = format(" At Block:{}", std::to_string(blockNo_)) + format(", Posdition:{}.", std::to_string(pos()));
-	throw ParserException(format(message, value) + posText, buffer(), getLengthAtPos());
+	size_t len = pos_;
+	if (eob())
+	{
+		len = pos_ + 1;
+	}
+	throw ParserException(format(message, value) + posText, buffer(), len);
 }
 
 void ParserBase::parserError(std::string message)
@@ -255,7 +260,6 @@ bool ParserBase::eob()
 ParserBase::ParserBase(ReaderBase* reader)
 {
 	reader_ = reader;
-	reader_->setProvider(this);
 	buffer_ = reader->blockBuffer();
 	preview_ = new Preview();
 	lastLength_ = 0;
@@ -296,12 +300,7 @@ size_t ParserBase::pos()
 	return pos_;
 }
 
-size_t ParserBase::getLengthAtPos()
-{
-	return pos_ + 1;
-}
-
-void ParserBase::parseBlockExternal(size_t length, size_t blockNo)
+void ParserBase::doParse(size_t length, size_t blockNo)
 {
 	pos_ = 0;
 	eob_ = length == 0;
@@ -326,6 +325,16 @@ std::string ParserBase::toString(char* value, size_t length)
 {
 	auto res = std::string(value, length);
 	return res;
+}
+
+void ParserBase::parse()
+{
+	while (reader_->read())
+	{
+		auto len = reader_->blockLength();
+		auto blockNo = reader_->blockCount() - 1;
+		doParse(len, blockNo);
+	}
 }
 
 char* ParserBase::toChar(char* value, size_t length)

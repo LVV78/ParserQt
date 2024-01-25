@@ -1,3 +1,4 @@
+//Parser implementation for *.ssd and *.rds
 #pragma once
 #include "ParserTemplate.h"
 #include <string>

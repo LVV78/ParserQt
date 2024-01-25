@@ -1,33 +1,35 @@
+//Basic reading module.Allows reads to be abstracted for any source
+//To simplify, copies from read buffer_ to the blcokBuffer_. The block (line) always starts at position 0
 #pragma once
 #include <stddef.h>
 
 #ifndef SAMPLE_BASE_H
 #define SAMPLE_BASE_H
 
-class ParserBase;
-
 class ReaderBase
 {
 private:
 	char stopChar_ = 0;
+	bool opened_ = false;
 	size_t size_ = 0;
 	char* blockBuffer_ = nullptr;
+	char* buffer_ = nullptr;
 	char* blockSeparator_ = nullptr;
 	char blockCharSeparator_ = stopChar_;
 	size_t blockSeparatorLength_ = 0;
 	size_t blockPos_ = 0;
+	size_t blockLength_ = 0;
 	size_t blockCount_ = 0;
 	size_t bufferSize_;
 	bool eof_ = false;
-	ParserBase* provider_ = nullptr;
 
 	inline bool isStop(char value);
 	inline bool isBlockSeparator(char value);
 	inline char getChar();
-	void endBlock();
+	void doOpen();
+	void doClose();
 protected:
 	size_t bufferPos_;
-	char* buffer_;
 	size_t readCount_ = 0;
 
 	virtual void open() = 0;
@@ -37,11 +39,13 @@ protected:
 public:
 	ReaderBase(const char* blockSeparator, size_t bufferSize = 1000);
 	virtual ~ReaderBase();
-	void setProvider(ParserBase* provider);
+
 	size_t bufferSize();
 	size_t blockCount();
+	size_t blockLength();
 	char* blockBuffer();
-	void read();
+	char* buffer();
+	bool read();
 };
 
 #endif

@@ -8,7 +8,7 @@ std::string ProviderException::getMessage() const
 	return message_;
 }
 
-ProviderPositionException::ProviderPositionException(std::string message, int pos) : ProviderException{ message }, pos_{ pos }
+ProviderPositionException::ProviderPositionException(std::string message, size_t pos) : ProviderException{ message }, pos_{ pos }
 {}
 
 std::string ProviderPositionException::getMessage() const
@@ -16,7 +16,7 @@ std::string ProviderPositionException::getMessage() const
 	return ProviderException::getMessage() + "Position=" + std::to_string(pos_);
 }
 
-ParserException::ParserException(std::string message, char* buffer, int length) :ProviderException{ message }
+ParserException::ParserException(std::string message, char* buffer, size_t length) :ProviderException{ message }
 {
 	text_ = "\"" + std::string(buffer, length) + "\"";
 }

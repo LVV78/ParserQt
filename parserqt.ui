@@ -45,7 +45,7 @@
      <x>0</x>
      <y>0</y>
      <width>1049</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -54,7 +54,16 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
+   <widget class="QMenu" name="menuTest">
+    <property name="title">
+     <string>Test</string>
+    </property>
+    <addaction name="actionNameTest"/>
+    <addaction name="actionNameError"/>
+    <addaction name="actionValueError"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuTest"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
@@ -63,6 +72,21 @@
    </property>
    <property name="shortcut">
     <string>F3</string>
+   </property>
+  </action>
+  <action name="actionNameTest">
+   <property name="text">
+    <string>Name</string>
+   </property>
+  </action>
+  <action name="actionNameError">
+   <property name="text">
+    <string>Name error</string>
+   </property>
+  </action>
+  <action name="actionValueError">
+   <property name="text">
+    <string>Value error</string>
    </property>
   </action>
  </widget>

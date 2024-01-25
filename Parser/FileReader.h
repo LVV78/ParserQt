@@ -1,3 +1,4 @@
+//Reader implementation of file reader
 #pragma once
 #include <fstream>
 #include "ReaderBase.h"

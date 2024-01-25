@@ -1,3 +1,6 @@
+//Basic parsing module. Contains basic functions for the ability to read different formats with a script
+//It has a set of slow(script) functions for header parsing.And fast for parsing large amounts of data
+//It also contains a structure for storing data from the source
 #pragma once
 #include <string>
 #include <cctype>
@@ -18,7 +21,10 @@ struct PointMinMax
 	double minX = DBL_MAX, minY = DBL_MAX, maxX = DBL_MIN, maxY = DBL_MIN;
 	void reset()
 	{
-		minX = DBL_MAX, minY = DBL_MAX, maxX = DBL_MIN, maxY = DBL_MIN;
+		minX = DBL_MAX;
+		minY = DBL_MAX;
+		maxX = DBL_MIN;
+		maxY = DBL_MIN;
 	}
 	void setX(double value)
 	{
@@ -77,12 +83,12 @@ private:
 	size_t lastLength_;
 	char* buffer();
 
+	void doParse(size_t length, size_t blockNo);
 	void callPreview();
 protected:
 	inline bool incPos();
 	size_t blockNo();
 	size_t pos();
-	size_t getLengthAtPos();
 	bool setPos(size_t value);
 	void virtual skipSpaces();
 	inline char getChar() const;
@@ -115,8 +121,7 @@ public:
 	bool in(std::vector<char> value, Separators separators);
 	double toDouble(char* value, size_t length);
 	std::string toString(char* value, size_t length);
-
-	void parseBlockExternal(size_t length, size_t blockNo);
+	void parse();
 	virtual size_t count()
 	{
 		return 0;

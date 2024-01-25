@@ -1,3 +1,4 @@
+//Reader implementation of simply string reader for tests
 #pragma once
 #pragma once
 #include <string>
