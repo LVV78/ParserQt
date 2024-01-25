@@ -13,6 +13,8 @@ void ReaderBase::setEof(bool value)
 
 ReaderBase::ReaderBase(const char* blockSeparator, size_t bufferSize)
 {
+	provider_ = nullptr;
+	bufferPos_ = 0;
 	bufferSize_ = bufferSize;
 	size_t length = strlen(blockSeparator);
 	blockSeparator_ = new char[length + 1];
@@ -24,7 +26,6 @@ ReaderBase::ReaderBase(const char* blockSeparator, size_t bufferSize)
 	}
 	buffer_ = new char[bufferSize_];
 	blockBuffer_ = new char[bufferSize_ + 1];
-
 }
 
 ReaderBase::~ReaderBase()
@@ -48,10 +49,12 @@ char* ReaderBase::blockBuffer()
 {
 	return blockBuffer_;
 }
+
 inline bool ReaderBase::isStop(char value)
 {
 	return stopChar_ == value;
 }
+
 inline  bool ReaderBase::isBlockSeparator(char value)
 {
 	if (blockCharSeparator_ == value)
@@ -71,7 +74,6 @@ inline  bool ReaderBase::isBlockSeparator(char value)
 	return false;
 }
 
-
 char ReaderBase::getChar()
 {
 	if (bufferPos_ >= readCount_)
@@ -85,13 +87,15 @@ char ReaderBase::getChar()
 	}
 	return  buffer_[bufferPos_++];
 }
+
 void ReaderBase::endBlock()
 {
 	blockPos_ -= blockSeparatorLength_;
-	provider_->parseBlockBegin(blockPos_ + 1, blockCount_);
+	provider_->parseBlockExternal(blockPos_ + 1, blockCount_);
 	blockPos_ = 0;
 	blockCount_++;
 }
+
 void ReaderBase::read()
 {
 	open();
@@ -133,9 +137,8 @@ void ReaderBase::read()
 	}
 	close();
 }
+
 size_t ReaderBase::blockCount()
 {
 	return blockCount_;
 }
-
-

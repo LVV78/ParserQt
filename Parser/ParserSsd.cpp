@@ -4,9 +4,7 @@
 
 void ParserSsd::parseBlock()
 {
-
 	skipSpaces();
-
 	switch (getChar())
 	{
 	case '#':
@@ -125,7 +123,6 @@ void ParserSsd::parseData()
 			d->minMax.setY(ssd.y);
 			d->Add(ssd);
 			return;
-
 		}
 	}
 	parserError(PE_VALUE_NOT_FOUND);

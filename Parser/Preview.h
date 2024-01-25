@@ -10,6 +10,7 @@ enum PhraseType
 	ptArray,
 	ptError
 };
+
 class PreviewItem
 {
 public:

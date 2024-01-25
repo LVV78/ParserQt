@@ -2,6 +2,7 @@
 #include "ParserBase.h"
 #include "Exceptions.h"
 #include <cstring>
+
 void ParserBase::skipSpaces()
 {
 	if (eob_)
@@ -21,6 +22,7 @@ void ParserBase::skipSpaces()
 
 	} while (incPos());
 }
+
 size_t ParserBase::readPhrase(char*& phrase, char separator, bool skipSpaces)
 {
 	if (eob_)
@@ -29,13 +31,12 @@ size_t ParserBase::readPhrase(char*& phrase, char separator, bool skipSpaces)
 	}
 	if (skipSpaces)
 	{
-        ParserBase::skipSpaces();
+		ParserBase::skipSpaces();
 	}
 	lastLength_ = 0;
 	phraseStart_ = pos_;
 	do
 	{
-
 		auto c = getChar();
 		if (c == separator)
 		{
@@ -49,8 +50,8 @@ size_t ParserBase::readPhrase(char*& phrase, char separator, bool skipSpaces)
 	lastLength_ = pos_ - phraseStart_ + 1;
 	phrase = &buffer_[phraseStart_];
 	return lastLength_;
-
 }
+
 std::vector<char> ParserBase::readPhrase(std::string& phrase, Separators separators, bool skipSpaces)
 {
 	if (eob_)
@@ -60,7 +61,7 @@ std::vector<char> ParserBase::readPhrase(std::string& phrase, Separators separat
 	}
 	if (skipSpaces)
 	{
-        ParserBase::skipSpaces();
+		ParserBase::skipSpaces();
 	}
 	lastLength_ = 0;
 	phraseStart_ = pos_;
@@ -92,6 +93,7 @@ std::vector<char> ParserBase::readPhrase(std::string& phrase, Separators separat
 	phrase = std::string(&buffer_[phraseStart_], lastLength_);
 	return {};
 }
+
 std::vector<char> ParserBase::readArray(StringArray& array, Separators arraySeparators, Separators separators, bool trimValues, bool skipSpaces)
 {
 	array.clear();
@@ -147,7 +149,6 @@ bool ParserBase::readName(std::string name, Separators separators, bool skipSpac
 
 }
 
-
 std::string ParserBase::readValue(Separators separators, bool skipSpaces)
 {
 	auto res = tryReadValue(separators, skipSpaces);
@@ -181,7 +182,7 @@ StringArray ParserBase::tryReadValues(Separators arraySeparators, Separators sep
 	std::vector<std::string> res;
 	if (skipSpaces)
 	{
-        ParserBase::skipSpaces();
+		ParserBase::skipSpaces();
 	}
 	auto start = pos_;
 	readArray(res, arraySeparators, separators, trimValues, skipSpaces);
@@ -194,8 +195,19 @@ char* ParserBase::buffer()
 	return buffer_;
 }
 
+void ParserBase::callPreview()
+{
+	if (previewCallback != nullptr && preview_->items_->size() > 0)
+	{
+		std::string txt(buffer_, length_);
+		previewCallback(preview_, txt);
+	}
+}
+
 void ParserBase::parserError(std::string message, std::string value)
 {
+	preview_->add(phraseStart_, lastLength_, ptError);
+	callPreview();
 	auto posText = format(" At Block:{}", std::to_string(blockNo_)) + format(", Posdition:{}.", std::to_string(pos()));
 	throw ParserException(format(message, value) + posText, buffer(), getLengthAtPos());
 }
@@ -235,13 +247,10 @@ bool ParserBase::in(std::vector<char> value, Separators separators)
 	return false;
 }
 
-
-
 bool ParserBase::eob()
 {
 	return eob_;
 }
-
 
 ParserBase::ParserBase(ReaderBase* reader)
 {
@@ -249,7 +258,9 @@ ParserBase::ParserBase(ReaderBase* reader)
 	reader_->setProvider(this);
 	buffer_ = reader->blockBuffer();
 	preview_ = new Preview();
+	lastLength_ = 0;
 }
+
 ParserBase::~ParserBase()
 {
 	delete reader_;
@@ -274,19 +285,23 @@ bool ParserBase::setPos(size_t value)
 	pos_ = value;
 	return true;
 }
+
 size_t ParserBase::blockNo()
 {
 	return blockNo_;
 }
+
 size_t ParserBase::pos()
 {
 	return pos_;
 }
+
 size_t ParserBase::getLengthAtPos()
 {
 	return pos_ + 1;
 }
-void ParserBase::parseBlockBegin(size_t length, size_t blockNo)
+
+void ParserBase::parseBlockExternal(size_t length, size_t blockNo)
 {
 	pos_ = 0;
 	eob_ = length == 0;
@@ -296,11 +311,7 @@ void ParserBase::parseBlockBegin(size_t length, size_t blockNo)
 	preview_->clear();
 	parseBlock();
 
-	if (previewCallback != nullptr && preview_->items_->size() > 0)
-	{
-		std::string txt(buffer_, length_);
-		previewCallback(preview_, txt);
-	}
+	callPreview();
 }
 
 double ParserBase::toDouble(char* value, size_t length)

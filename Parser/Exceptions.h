@@ -7,18 +7,17 @@ class ProviderException : public std::exception
 {
 public:
 	ProviderException(std::string message);
-
 	virtual std::string getMessage() const;
 
 private:
 	std::string message_;
 };
+
 class ProviderPositionException : public ProviderException
 {
 public:
 	ProviderPositionException(std::string message, int pos);
 	std::string getMessage() const override;
-
 private:
 	int pos_;
 };
@@ -27,9 +26,7 @@ class ParserException : public ProviderException
 {
 public:
 	ParserException(std::string message, char* buffer, int length);
-
 	std::string getMessage() const override;
-
 private:
 	std::string text_;
 };

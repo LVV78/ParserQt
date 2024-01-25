@@ -13,9 +13,7 @@ public:
 
 	void Add(Point value)
 	{
-
 		values_->push_back(value);
-
 	}
 	~SsdData()
 	{
@@ -34,7 +32,7 @@ private:
 protected:
 	void parseBlock() override;
 public:
-    ParserSsd(ReaderBase* reader) :ParserTemplate(reader) {}
+	ParserSsd(ReaderBase* reader) :ParserTemplate(reader) {}
 
 	size_t count() override
 	{

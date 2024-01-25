@@ -93,8 +93,10 @@
     <ClCompile Include="Parser\FileReader.cpp" />
     <ClCompile Include="Parser\ParserBase.cpp" />
     <ClCompile Include="Parser\ParserSsd.cpp" />
+    <ClCompile Include="Parser\ParserStringTest.cpp" />
     <ClCompile Include="Parser\Preview.cpp" />
     <ClCompile Include="Parser\ReaderBase.cpp" />
+    <ClCompile Include="Parser\StringReader.cpp" />
     <QtRcc Include="ParserQt.qrc" />
     <QtUic Include="ParserQt.ui" />
     <QtMoc Include="ParserQt.h" />
@@ -106,9 +108,11 @@
     <ClInclude Include="Parser\FileReader.h" />
     <ClInclude Include="Parser\ParserBase.h" />
     <ClInclude Include="Parser\ParserSsd.h" />
+    <ClInclude Include="Parser\ParserStringTest.h" />
     <ClInclude Include="Parser\ParserTemplate.h" />
     <ClInclude Include="Parser\Preview.h" />
     <ClInclude Include="Parser\ReaderBase.h" />
+    <ClInclude Include="Parser\StringReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

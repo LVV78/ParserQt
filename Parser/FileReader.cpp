@@ -1,7 +1,6 @@
 #include "FileReader.h"
 #include "Exceptions.h"
 
-
 FileReader::FileReader(const char* fileName, const char* blockSeparator, size_t bufferSize) :ReaderBase(blockSeparator, bufferSize), fileName_(fileName)
 {
 }
@@ -14,6 +13,7 @@ void FileReader::open()
 		throw ProviderException(format(PE_FILE_NOT_FOUND, fileName_));
 	}
 }
+
 void FileReader::close()
 {
 	if (file_.is_open())
@@ -27,5 +27,4 @@ size_t FileReader::readBuffer()
 	file_.read(buffer_, (std::streamsize)bufferSize());
 	setEof(file_.eof());
 	return (size_t)file_.gcount();
-
 }

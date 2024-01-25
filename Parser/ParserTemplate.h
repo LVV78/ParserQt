@@ -9,11 +9,11 @@ class ParserTemplate : public ParserBase
 private:
 	T* data_;
 public:
-    ParserTemplate(ReaderBase* reader) :ParserBase(reader)
+	ParserTemplate(ReaderBase* reader) :ParserBase(reader)
 	{
 		data_ = new T();
 	}
-    ~ParserTemplate()
+	~ParserTemplate()
 	{
 		delete data_;
 	}
@@ -21,12 +21,9 @@ public:
 
 };
 
-
-
 template<typename T>
 T* ParserTemplate<T>::getData()
 {
 	return data_;
-
 }
 #endif

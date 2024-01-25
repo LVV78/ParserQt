@@ -12,6 +12,7 @@ struct Point
 {
 	double x, y;
 };
+
 struct PointMinMax
 {
 	double minX = DBL_MAX, minY = DBL_MAX, maxX = DBL_MIN, maxY = DBL_MIN;
@@ -50,6 +51,7 @@ struct PointMinMax
 		return maxY - minY;
 	}
 };
+
 typedef  std::vector<std::vector<char>> Separators;
 typedef std::vector<std::string> StringArray;
 typedef void(*previewPtr)(Preview* previrew, std::string&);
@@ -59,8 +61,11 @@ inline bool icharEquals(char a, char b)
 	return std::tolower(static_cast<unsigned char>(a)) ==
 		std::tolower(static_cast<unsigned char>(b));
 }
+
 std::string trim(const std::string& str);
+
 class ReaderBase;
+
 class ParserBase
 {
 private:
@@ -70,8 +75,9 @@ private:
 	bool eob_ = false, bob_ = false;
 	Preview* preview_ = nullptr;
 	size_t lastLength_;
-
 	char* buffer();
+
+	void callPreview();
 protected:
 	inline bool incPos();
 	size_t blockNo();
@@ -96,23 +102,21 @@ protected:
 	void parserError(std::string message, std::string value);
 	void parserError(std::string message);
 	char* toChar(char* value, size_t length);
-
 	virtual void parseBlock()
 	{
 
 	}
 public:
-    ParserBase(ReaderBase* reader);
-    virtual ~ParserBase();
+	ParserBase(ReaderBase* reader);
+	virtual ~ParserBase();
 
 	previewPtr previewCallback = nullptr;
 
 	bool in(std::vector<char> value, Separators separators);
-	void parseBlockBegin(size_t length, size_t blockNo);
-
 	double toDouble(char* value, size_t length);
 	std::string toString(char* value, size_t length);
 
+	void parseBlockExternal(size_t length, size_t blockNo);
 	virtual size_t count()
 	{
 		return 0;
@@ -126,8 +130,6 @@ public:
 		return PointMinMax();
 	}
 };
-
-
 
 #endif
 inline char ParserBase::getChar() const

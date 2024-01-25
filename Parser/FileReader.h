@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include "ReaderBase.h"
+
 class FileReader : public ReaderBase
 {
 private:
