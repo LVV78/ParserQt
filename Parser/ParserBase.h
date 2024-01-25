@@ -1,6 +1,6 @@
-//Basic parsing module. Contains basic functions for the ability to read different formats with a script
-//It has a set of slow(script) functions for header parsing.And fast for parsing large amounts of data
-//It also contains a structure for storing data from the source
+//Basic parsing module. It contains basic functions for the ability to read different formats with a script
+//It has a set of slow(script) functions for header parsing. And it has fast functions for parsing large amounts of data
+//It also contains a structure for storing data
 #pragma once
 #include <string>
 #include <cctype>

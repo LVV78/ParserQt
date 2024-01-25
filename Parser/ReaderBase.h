@@ -1,5 +1,4 @@
-//Basic reading module.Allows reads to be abstracted for any source
-//To simplify, copies from read buffer_ to the blcokBuffer_. The block (line) always starts at position 0
+//Basic reading module. It allows to read abstracted data from any source
 #pragma once
 #include <stddef.h>
 
